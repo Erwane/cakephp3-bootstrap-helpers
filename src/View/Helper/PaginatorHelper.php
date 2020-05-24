@@ -61,17 +61,17 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
     protected $_defaultConfig = [
         'options' => [],
         'templates' => [
-            'nextActive' => '<li><a href="{{url}}">{{text}}</a></li>',
-            'nextDisabled' => '<li class="disabled"><a>{{text}}</a></li>',
-            'prevActive' => '<li><a href="{{url}}">{{text}}</a></li>',
-            'prevDisabled' => '<li class="disabled"><a>{{text}}</a></li>',
+            'nextActive' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'nextDisabled' => '<li class="disabled page-item"><a class="page-link">{{text}}</a></li>',
+            'prevActive' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'prevDisabled' => '<li class="disabled  page-item"><a class="page-link">{{text}}</a></li>',
             'counterRange' => '{{start}} - {{end}} of {{count}}',
             'counterPages' => '{{page}} of {{pages}}',
-            'first' => '<li><a href="{{url}}">{{text}}</a></li>',
-            'last' => '<li><a href="{{url}}">{{text}}</a></li>',
-            'number' => '<li><a href="{{url}}">{{text}}</a></li>',
-            'current' => '<li class="active"><a href="{{url}}">{{text}}</a></li>',
-            'ellipsis' => '<li class="ellipsis disabled"><a>&hellip;</a></li>',
+            'first' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'last' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'number' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'current' => '<li class="active page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'ellipsis' => '<li class="ellipsis disabled page-item"><a class="page-link">&hellip;</a></li>',
             'sort' => '<a href="{{url}}">{{text}}</a>',
             'sortAsc' => '<a class="asc" href="{{url}}">{{text}}</a>',
             'sortDesc' => '<a class="desc" href="{{url}}">{{text}}</a>',
@@ -176,10 +176,6 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
                 break;
         }
         unset($options['size']);
-
-        $options['before'] .= $this->Html->tag('ul', null, ['class' => $options['class']]);
-        $options['after'] = '</ul>' . $options['after'];
-        unset($options['class']);
 
         $params = (array)$this->params($options['model']) + ['page' => 1];
         if ($params['pageCount'] <= 1) {
