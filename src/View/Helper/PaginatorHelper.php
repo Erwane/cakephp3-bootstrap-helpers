@@ -1,14 +1,16 @@
 <?php
-declare(strict_types=1);
-
 /**
+ *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE file
  * Redistributions of files must retain the above copyright notice.
+ * You may obtain a copy of the License at
  *
- * @copyright   Copyright (c) Mikaël Capelle (https://typename.fr)
- * @license     https://opensource.org/licenses/mit-license.php MIT License
- * @link        https://holt59.github.io/cakephp3-bootstrap-helpers/
+ *     https://opensource.org/licenses/mit-license.php
+ *
+ *
+ * @copyright Copyright (c) Mikaël Capelle (https://typename.fr)
+ * @license https://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Bootstrap\View\Helper;
 
@@ -22,8 +24,8 @@ namespace Bootstrap\View\Helper;
  * @property \Bootstrap\View\Helper\HtmlHelper $Html
  * @link http://book.cakephp.org/3.0/en/views/helpers/paginator.html
  */
-class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
-{
+class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper {
+
     use ClassTrait;
     use EasyIconTrait;
 
@@ -33,7 +35,7 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      * @var array
      */
     public $helpers = [
-        'Url', 'Number', 'Html',
+        'Url', 'Number', 'Html'
     ];
 
     /**
@@ -57,16 +59,16 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
     protected $_defaultConfig = [
         'options' => [],
         'templates' => [
-            'nextActive' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
-            'nextDisabled' => '<li class="page-item disabled"><a class="page-link">{{text}}</a></li>',
-            'prevActive' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
-            'prevDisabled' => '<li class="page-item disabled"><a class="page-link">{{text}}</a></li>',
+            'nextActive' => '<li><a href="{{url}}">{{text}}</a></li>',
+            'nextDisabled' => '<li class="disabled"><a>{{text}}</a></li>',
+            'prevActive' => '<li><a href="{{url}}">{{text}}</a></li>',
+            'prevDisabled' => '<li class="disabled"><a>{{text}}</a></li>',
             'counterRange' => '{{start}} - {{end}} of {{count}}',
             'counterPages' => '{{page}} of {{pages}}',
-            'first' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
-            'last' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
-            'number' => '<li class="page-item"><a href="{{url}}" class="page-link">{{text}}</a></li>',
-            'current' => '<li class="page-item active"><a href="{{url}}" class="page-link">{{text}}</a></li>',
+            'first' => '<li><a href="{{url}}">{{text}}</a></li>',
+            'last' => '<li><a href="{{url}}">{{text}}</a></li>',
+            'number' => '<li><a href="{{url}}">{{text}}</a></li>',
+            'current' => '<li class="active"><a href="{{url}}">{{text}}</a></li>',
             'ellipsis' => '<li class="ellipsis disabled"><a>&hellip;</a></li>',
             'sort' => '<a href="{{url}}">{{text}}</a>',
             'sortAsc' => '<a class="asc" href="{{url}}">{{text}}</a>',
@@ -84,33 +86,31 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      * @param array $options Options from the numbers() method.
      * @return array An array with the start and end numbers.
      */
-    protected function _getNumbersStartAndEnd(array $params, array $options): array
-    {
+    protected function _getNumbersStartAndEnd($params, $options) {
         $half = (int)($options['modulus'] / 2);
         $end = max(1 + $options['modulus'], $params['page'] + $half);
         $start = min($params['pageCount'] - $options['modulus'], $params['page'] - $half - $options['modulus'] % 2);
 
         // See the numbers method.
-        $first = $options['first_'] ?? $options['first'];
-        $last = $options['last_'] ?? $options['last'];
+        $first = isset($options['first_']) ? $options['first_'] : $options['first'];
+        $last = isset($options['last_']) ? $options['last_'] : $options['last'];
 
-        if ($first) {
-            $first = is_int($first) ? $first : 1;
-            if ($start <= $first + 2) {
-                $start = 1;
-            }
-        }
-        if ($last) {
-            $last = is_int($last) ? $last : 1;
-            if ($end >= $params['pageCount'] - $last - 1) {
-                $end = $params['pageCount'];
-            }
-        }
+         if ($first) {
+             $first = is_int($first) ? $first : 1;
+             if ($start <= $first + 2) {
+                 $start = 1;
+             }
+         }
+         if ($last) {
+             $last = is_int($last) ? $last : 1;
+             if ($end >= $params['pageCount'] - $last - 1) {
+                 $end = $params['pageCount'];
+             }
+         }
          $end = min($params['pageCount'], $end);
          $start = max(1, $start);
-
          return [$start, $end];
-    }
+     }
 
     /**
      * Returns a set of numbers for the paged result set using a modulus to decide how
@@ -149,37 +149,38 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      * inserted after the first and last link sets.
      *
      * @param array $options Options for the numbers.
+     *
      * @return string numbers string.
      * @link http://book.cakephp.org/3.0/en/views/helpers/paginator.html#creating-page-number-links
      */
-    public function numbers(array $options = []): string
-    {
+    public function numbers(array $options = []) {
+
         $defaults = [
             'before' => null, 'after' => null, 'model' => $this->defaultModel(),
             'modulus' => 8, 'first' => null, 'last' => null, 'url' => [],
-            'prev' => null, 'next' => null, 'class' => '', 'size' => false,
+            'prev' => null, 'next' => null, 'class' => '', 'size' => false
         ];
         $options += $defaults;
 
         $options = $this->addClass($options, 'pagination');
 
         switch ($options['size']) {
-            case 'small':
-                $options = $this->addClass($options, 'pagination-sm');
-                break;
-            case 'large':
-                $options = $this->addClass($options, 'pagination-lg');
-                break;
+        case 'small':
+            $options = $this->addClass($options, 'pagination-sm');
+            break;
+        case 'large':
+            $options = $this->addClass($options, 'pagination-lg');
+            break;
         }
         unset($options['size']);
 
         $options['before'] .= $this->Html->tag('ul', null, ['class' => $options['class']]);
-        $options['after'] = '</ul>' . $options['after'];
+        $options['after'] = '</ul>'.$options['after'];
         unset($options['class']);
 
         $params = (array)$this->params($options['model']) + ['page' => 1];
         if ($params['pageCount'] <= 1) {
-            return false;
+            return '';
         }
 
         $templater = $this->templater();
@@ -192,13 +193,14 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
         $first = $prev = $next = $last = '';
 
         /* Previous and Next buttons (addition from standard PaginatorHelper). */
+
         if ($options['prev']) {
             $title = $options['prev'];
-            $opts = [];
+            $opts  = [];
             if (is_array($title)) {
                 $title = $title['title'];
-                unset($options['prev']['title']);
-                $opts = $options['prev'];
+                unset ($options['prev']['title']);
+                $opts  = $options['prev'];
             }
             $prev = $this->prev($title, $opts);
         }
@@ -206,11 +208,11 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
 
         if ($options['next']) {
             $title = $options['next'];
-            $opts = [];
+            $opts  = [];
             if (is_array($title)) {
                 $title = $title['title'];
-                unset($options['next']['title']);
-                $opts = $options['next'];
+                unset ($options['next']['title']);
+                $opts  = $options['next'];
             }
             $next = $this->next($title, $opts);
         }
@@ -218,18 +220,17 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
 
         /* Custom First and Last. */
 
-        [$start, $end] = $this->_getNumbersStartAndEnd($params, $options);
+        list($start, $end) = $this->_getNumbersStartAndEnd($params, $options);
 
         $ellipsis = $templater->format('ellipsis', []);
         $first = $this->_firstNumber($ellipsis, $params, $start, $options);
         $last = $this->_lastNumber($ellipsis, $params, $end, $options);
 
-        $before = is_int($options['first']) && $options['first'] > 1 ? $prev . $first : $first . $prev;
-        $after = is_int($options['last']) && $options['last'] > 1 ? $last . $next : $next . $last;
+        $before = (is_int($options['first']) && $options['first'] > 1) ? $prev.$first : $first.$prev;
+        $after  = (is_int($options['last']) && $options['last'] > 1) ? $last.$next : $next.$last;
 
-        $options['before'] = $options['before'] . $before;
-
-        $options['after'] = $after . $options['after'];
+        $options['before'] = $options['before'].$before;;
+        $options['after']  = $after.$options['after'];
 
         // New options used to allow the _getNumbersStartAndEnd method to work correctly without having
         // the actual last and first number outputed by the _modulusNumbers.
@@ -268,13 +269,13 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      *
      * @param string $title Title for the link. Defaults to '<< Previous'.
      * @param array $options Options for pagination link. See above for list of keys.
+     *
      * @return string A "previous" link or a disabled link.
+     *
      * @link http://book.cakephp.org/3.0/en/views/helpers/paginator.html#creating-jump-links
      */
-    public function prev(string $title = '<< Previous', array $options = []): string
-    {
-        [$options, $easyIcon] = $this->_easyIconOption($options);
-
+    public function prev($title = '<< Previous', array $options = []) {
+        list($options, $easyIcon) = $this->_easyIconOption($options);
         return $this->_injectIcon(parent::prev($title, $options), $easyIcon);
     }
 
@@ -295,13 +296,13 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      *
      * @param string $title Title for the link. Defaults to 'Next >>'.
      * @param array $options Options for pagination link. See above for list of keys.
+     *
      * @return string A "next" link or $disabledTitle text if the link is disabled.
+     *
      * @link http://book.cakephp.org/3.0/en/views/helpers/paginator.html#creating-jump-links
      */
-    public function next(string $title = 'Next >>', array $options = []): string
-    {
-        [$options, $easyIcon] = $this->_easyIconOption($options);
-
+    public function next($title = 'Next >>', array $options = []) {
+        list($options, $easyIcon) = $this->_easyIconOption($options);
         return $this->_injectIcon(parent::next($title, $options), $easyIcon);
     }
 
@@ -331,13 +332,13 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      * @param string|int $first   if string use as label for the link. If numeric, the number
      * of page links you want at the beginning of the range.
      * @param array      $options An array of options.
+     *
      * @return string numbers string.
+     *
      * @link http://book.cakephp.org/3.0/en/views/helpers/paginator.html#creating-jump-links
      */
-    public function first($first = '<< first', array $options = []): string
-    {
-        [$options, $easyIcon] = $this->_easyIconOption($options);
-
+    public function first($first = '<< first', array $options = []) {
+        list($options, $easyIcon) = $this->_easyIconOption($options);
         return $this->_injectIcon(parent::first($first, $options), $easyIcon);
     }
 
@@ -367,13 +368,16 @@ class PaginatorHelper extends \Cake\View\Helper\PaginatorHelper
      * @param string|int $last    if string use as label for the link, if numeric print
      * page numbers.
      * @param array      $options Array of options.
+     *
      * @return string numbers string.
+     *
      * @link http://book.cakephp.org/3.0/en/views/helpers/paginator.html#creating-jump-links
      */
-    public function last($last = 'last >>', array $options = []): string
-    {
-        [$options, $easyIcon] = $this->_easyIconOption($options);
-
+    public function last($last = 'last >>', array $options = []) {
+        list($options, $easyIcon) = $this->_easyIconOption($options);
         return $this->_injectIcon(parent::last($last, $options), $easyIcon);
     }
+
 }
+
+?>
